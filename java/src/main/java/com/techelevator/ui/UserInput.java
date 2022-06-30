@@ -1,5 +1,8 @@
 package com.techelevator.ui;
 
+import com.techelevator.application.ItemStock;
+import com.techelevator.products.Product;
+
 import java.math.BigDecimal;
 import java.util.Scanner;
 
@@ -83,7 +86,6 @@ public class UserInput
     {
         System.out.print("Enter the slot location: ");
         String productId = scanner.nextLine();
-
         return productId.toUpperCase().trim();
     }
 

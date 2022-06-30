@@ -34,7 +34,7 @@ public class FileProductLoader
                 BigDecimal price = new BigDecimal(components[2]);
                 String type = components[3];
 
-                Product product = new Product(slotLocation, name, price, type);
+                Product product = new Product(slotLocation, name, price, type, 5);
 
                 // add it to the list
                 products.add(product);

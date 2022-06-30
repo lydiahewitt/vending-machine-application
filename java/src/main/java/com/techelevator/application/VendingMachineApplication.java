@@ -37,6 +37,7 @@ The vending machine application is the main application.
                     if (purchaseChoice.equals("Feed Money")) {
                         feedMoney();
                     } else if (purchaseChoice.equals("Select Product")) {
+                        displayItems();
                         selectProduct();
                     } else if (purchaseChoice.equals("Finish Transaction")) {
                         finishTransaction();
@@ -58,7 +59,7 @@ The vending machine application is the main application.
     public void makeAPurchase() {
         String chosenProductLocation = UserInput.getSelectedProduct();
         //reduce quantity
-        ItemStock.getVendingMachineItems().put(chosenProductLocation, ItemStock.getVendingMachineItems().get(chosenProductLocation) - 1);
+       // ItemStock.getVendingMachineItems().put(chosenProductLocation, ItemStock.getVendingMachineItems().get(chosenProductLocation) - 1);
         //give change
         BigDecimal chosenProductPrice = BigDecimal.ZERO;
         for (Product product : ItemStock.getProducts()) {
@@ -70,23 +71,57 @@ The vending machine application is the main application.
         BigDecimal change = paymentInput.subtract(chosenProductPrice);
     }
 
-    public void feedMoney() {
+    public BigDecimal feedMoney() {
         paymentInput = paymentInput.add(UserInput.getCash());
         System.out.println("Current Money Provided: $" + paymentInput);
+        return paymentInput;
     }
 
     public String selectProduct() {
+
         String chosenProductLocation = UserInput.getSelectedProduct();
+        if (!ItemStock.getVendingMachineItems().containsKey(chosenProductLocation)){
+            System.out.println("Invalid Stock number");
+        }
+        if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getQuantity() == 0 ){
+
+            System.out.println(chosenProductLocation + " is out of stock");
+        }
+        System.out.println(ItemStock.findProduct(chosenProductLocation).getName() + " "
+                + "Price: $" + ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice() + " "
+                + "\nRemaining balance: $" + paymentInput.subtract(ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice()));
+        Product updateProduct = new Product(ItemStock.getVendingMachineItems().get(chosenProductLocation).getSlotLocation(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getName(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getType(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getQuantity() - 1);
+         ItemStock.getVendingMachineItems().put(chosenProductLocation, updateProduct);
+         if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getType().equalsIgnoreCase("Chip")){
+             System.out.println("Crunch Crunch, Yum!");
+             System.out.println(" ");
+
+         } else if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getType().equalsIgnoreCase("Candy")){
+             System.out.println("Munch Munch, Yum!");
+             System.out.println(" ");
+
+        }else if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getType().equalsIgnoreCase("Drink")){
+             System.out.println("Glug Glug, Yum!");
+             System.out.println(" ");
+
+         } else if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getType().equalsIgnoreCase("Gum")){
+         System.out.println("Chew Chew, Yum!");
+             System.out.println(" ");
+
+    }
         return chosenProductLocation;
     }
 
     public void finishTransaction() {
-        BigDecimal chosenProductPrice = BigDecimal.ZERO;
-        for (Product product : ItemStock.getProducts()) {
-            if (product.getSlotLocation().equals(selectProduct())) {
-                chosenProductPrice = product.getPrice();
-            }
-        }
+        String chosenProductLocation = UserInput.getSelectedProduct();
+        BigDecimal remainingBalance = paymentInput.subtract(ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice());
+
+//        BigDecimal chosenProductPrice = BigDecimal.ZERO;
+//        for (Product product : ItemStock.getProducts()) {
+//            if (product.getSlotLocation().equals(selectProduct())) {
+//                chosenProductPrice = product.getPrice();
+//            }
+//        }
     }
 
 }

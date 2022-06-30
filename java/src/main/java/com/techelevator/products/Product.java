@@ -14,11 +14,14 @@ public class Product
     private String type;
     private int quantity = 5;
 
-    public Product(String slotLocation, String name, BigDecimal price, String type) {
+
+
+    public Product(String slotLocation, String name, BigDecimal price, String type, int quantity) {
         this.slotLocation = slotLocation;
         this.name = name;
         this.price = price;
         this.type = type;
+
     }
 
     public String getSlotLocation() {
@@ -36,6 +39,11 @@ public class Product
     public String getType() {
         return type;
     }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
 
     @Override
     public String toString()

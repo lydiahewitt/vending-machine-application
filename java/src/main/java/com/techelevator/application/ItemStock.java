@@ -10,7 +10,7 @@ import java.util.Map;
 public class ItemStock {
 
     private static List<Product> itemsList;
-    private static Map<String, Integer> vendingMachineItems = new HashMap<>();
+    private static Map<String, Product> vendingMachineItems = new HashMap<>();
 
     public static List<Product> getProducts() {
         return itemsList;
@@ -21,16 +21,19 @@ public class ItemStock {
         itemsList = loader.getProducts();
         for (Product product: itemsList) {
             int quantity = 5;
-            vendingMachineItems.put(product.getSlotLocation(), quantity);
+            vendingMachineItems.put(product.getSlotLocation(), product);
+
         }
     }
 
 // creating a map of the products in the machine
 
-    public static Map<String, Integer> getVendingMachineItems() {
+    public static Map<String, Product> getVendingMachineItems() {
         return vendingMachineItems;
     }
-
+    public static Product findProduct(String stockId){
+        return vendingMachineItems.get(stockId);
+    }
 
 
 
