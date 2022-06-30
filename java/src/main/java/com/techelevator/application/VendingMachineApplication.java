@@ -6,6 +6,7 @@ public class VendingMachineApplication {
 
         while(true) {
             // todo: display home screen
+
             // todo: and get user choice
             String userChoice = "display";
 
