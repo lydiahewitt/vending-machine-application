@@ -1,6 +1,7 @@
 package com.techelevator.application;
 
 import com.techelevator.file_io.FileProductLoader;
+import com.techelevator.products.Money;
 import com.techelevator.products.Product;
 import com.techelevator.ui.UserInput;
 import com.techelevator.ui.UserOutput;
@@ -17,6 +18,7 @@ The vending machine application is the main application.
 
     ItemStock inventory = new ItemStock();
     BigDecimal paymentInput = BigDecimal.ZERO;
+    BigDecimal remainingBalance = BigDecimal.ZERO;
 
     public void run() {
 
@@ -77,7 +79,7 @@ The vending machine application is the main application.
         return paymentInput;
     }
 
-    public String selectProduct() {
+    public void selectProduct() {
 
         String chosenProductLocation = UserInput.getSelectedProduct();
         if (!ItemStock.getVendingMachineItems().containsKey(chosenProductLocation)){
@@ -87,9 +89,10 @@ The vending machine application is the main application.
 
             System.out.println(chosenProductLocation + " is out of stock");
         }
+        remainingBalance = paymentInput.subtract(ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice());
         System.out.println(ItemStock.findProduct(chosenProductLocation).getName() + " "
                 + "Price: $" + ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice() + " "
-                + "\nRemaining balance: $" + paymentInput.subtract(ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice()));
+                + "\nRemaining balance: $" + remainingBalance);
         Product updateProduct = new Product(ItemStock.getVendingMachineItems().get(chosenProductLocation).getSlotLocation(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getName(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getType(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getQuantity() - 1);
          ItemStock.getVendingMachineItems().put(chosenProductLocation, updateProduct);
          if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getType().equalsIgnoreCase("Chip")){
@@ -109,19 +112,12 @@ The vending machine application is the main application.
              System.out.println(" ");
 
     }
-        return chosenProductLocation;
     }
 
     public void finishTransaction() {
-        String chosenProductLocation = UserInput.getSelectedProduct();
-        BigDecimal remainingBalance = paymentInput.subtract(ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice());
-
-//        BigDecimal chosenProductPrice = BigDecimal.ZERO;
-//        for (Product product : ItemStock.getProducts()) {
-//            if (product.getSlotLocation().equals(selectProduct())) {
-//                chosenProductPrice = product.getPrice();
-//            }
-//        }
+        Money.getChange(this.remainingBalance);
+        remainingBalance = BigDecimal.ZERO;
+        paymentInput = BigDecimal.ZERO;
     }
 
 }
