@@ -9,15 +9,6 @@ import java.util.List;
 import java.util.Scanner;
 
 
-
-/**
- * Responsibilities:
- *      Read a txt/csv file and convert each line to a product
- *      returns a list of all products found in the file
- *
- * Dependencies:
- *      Product
- */
 public class FileProductLoader
 {
 
@@ -25,7 +16,7 @@ public class FileProductLoader
     {
         List<Product> products = new ArrayList<Product>();
 
-        File productsPath = new File("data/products.csv");
+        File productsPath = new File("data/vendingmachine.csv");
         try(Scanner fileScanner = new Scanner(productsPath))
         {
             // read one line to skip the header
@@ -36,13 +27,14 @@ public class FileProductLoader
             {
                 String line = fileScanner.nextLine();
                 // create the product
-                String[] parts = line.split("\\|");
+                String[] components = line.split("\\|");
 
-                String id = parts[0];
-                String name = parts[1];
-                BigDecimal price = new BigDecimal(parts[2]);
+                String slotLocation = components[0];
+                String name = components[1];
+                BigDecimal price = new BigDecimal(components[2]);
+                String type = components[3];
 
-                Product product = new Product(id, name, price, type);
+                Product product = new Product(slotLocation, name, price, type);
 
                 // add it to the list
                 products.add(product);
