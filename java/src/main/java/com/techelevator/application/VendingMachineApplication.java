@@ -76,14 +76,23 @@ The vending machine application is the main application.
         String chosenProductLocation = UserInput.getSelectedProduct();
         if (!ItemStock.getVendingMachineItems().containsKey(chosenProductLocation)){
             System.out.println("Invalid Stock number");
+            System.out.println();
+            run();
+
         }
         if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getQuantity() == 0 ){
-
             System.out.println(chosenProductLocation + " is out of stock");
+            System.out.println();
+            run();
+
+        }
+        if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice().compareTo(currentBalance) == 1) {
+            System.out.println("Insert more money");
+            System.out.println();
+            run();
         }
 
         currentBalance = currentBalance.subtract(ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice());
-
 
         System.out.println(ItemStock.findProduct(chosenProductLocation).getName() + " "
                 + "Price: $" + ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice() + " "
