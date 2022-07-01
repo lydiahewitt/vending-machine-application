@@ -2,6 +2,7 @@ package com.techelevator.application;
 
 import com.techelevator.file_io.FileProductLoader;
 import com.techelevator.file_io.Logger;
+import com.techelevator.file_io.SalesReport;
 import com.techelevator.products.Money;
 import com.techelevator.products.Product;
 import com.techelevator.ui.UserInput;
@@ -9,19 +10,33 @@ import com.techelevator.ui.UserOutput;
 import com.techelevator.application.ItemStock;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VendingMachineApplication {
 
 /*
 The vending machine application is the main application.
  */
-    Logger logger = new Logger("C:\\Users\\Student\\workspace\\green-module-1-week-4-pair-10\\java\\src\\main\\resources");
+    Logger logger = new Logger("logs");
+    private SalesReport salesReport = new SalesReport("sales");
 
     ItemStock inventory = new ItemStock();
     BigDecimal paymentInput = BigDecimal.ZERO;
-    BigDecimal remainingBalance = BigDecimal.ZERO;
+    //BigDecimal remainingBalance = BigDecimal.ZERO;
     BigDecimal currentBalance = BigDecimal.ZERO;
+    static Map<String, Integer> salesMap = new HashMap<>();
+    BigDecimal totalPrice = BigDecimal.ZERO;
+
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public static Map<String, Integer> getSalesMap() {
+        return salesMap;
+    }
 
     public void run() {
 
@@ -51,8 +66,12 @@ The vending machine application is the main application.
                 }
 
             } else if (userChoice.equalsIgnoreCase("exit")) {
+
                 // break out of the loop and end the application
                 break;
+            } else if (userChoice.equalsIgnoreCase("Sales Report")){
+                salesReport.createReport(this);
+
             }
         }
     }
@@ -64,58 +83,89 @@ The vending machine application is the main application.
     public BigDecimal feedMoney() {
         paymentInput = BigDecimal.ZERO;
         paymentInput = paymentInput.add(UserInput.getCash());
-        currentBalance = (currentBalance.add(paymentInput));
+       feedMoney(paymentInput);
         System.out.println("Current Money Provided: $" + currentBalance);
         Logger.logMessage("FEED MONEY: " + "$" + paymentInput + " " + "$" + currentBalance);
+        return currentBalance;
+    }
+    public BigDecimal feedMoney (BigDecimal amount){
+        currentBalance = (currentBalance.add(amount));
         return currentBalance;
     }
 
 
     public void selectProduct() {
 
+
         String chosenProductLocation = UserInput.getSelectedProduct();
+
+
         if (!ItemStock.getVendingMachineItems().containsKey(chosenProductLocation)){
             System.out.println("Invalid Stock number");
             System.out.println();
-            run();
-
+            return;
         }
-        if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getQuantity() == 0 ){
+
+
+        if (ItemStock.findProduct(chosenProductLocation).getQuantity() == 0 ){
             System.out.println(chosenProductLocation + " is out of stock");
             System.out.println();
-            run();
+            return;
 
         }
         if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice().compareTo(currentBalance) == 1) {
             System.out.println("Insert more money");
             System.out.println();
-            run();
+            return;
         }
-
-        currentBalance = currentBalance.subtract(ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice());
-
+        Product updateProduct = ItemStock.purchaseProduct(chosenProductLocation);
+        if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice().compareTo(currentBalance) == -1 || ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice().compareTo(currentBalance) == 0 ) {
+            currentBalance = currentBalance.subtract(ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice());
+        }
         System.out.println(ItemStock.findProduct(chosenProductLocation).getName() + " "
                 + "Price: $" + ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice() + " "
                 + "\nRemaining balance: $" + currentBalance);
-        Product updateProduct = new Product(ItemStock.getVendingMachineItems().get(chosenProductLocation).getSlotLocation(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getName(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getType(), ItemStock.getVendingMachineItems().get(chosenProductLocation).getQuantity() - 1);
-         ItemStock.getVendingMachineItems().put(chosenProductLocation, updateProduct);
-         if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getType().equalsIgnoreCase("Chip")){
+
+       //  Product updateProduct = ItemStock.purchaseProduct(chosenProductLocation);
+
+
+
+         if (updateProduct.getType().equalsIgnoreCase("Chip")){
              System.out.println("Crunch Crunch, Yum!");
+
+
              System.out.println(" ");
 
          } else if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getType().equalsIgnoreCase("Candy")){
              System.out.println("Munch Munch, Yum!");
+
              System.out.println(" ");
 
         }else if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getType().equalsIgnoreCase("Drink")){
              System.out.println("Glug Glug, Yum!");
+
              System.out.println(" ");
 
-         } else if (ItemStock.getVendingMachineItems().get(chosenProductLocation).getType().equalsIgnoreCase("Gum")){
+         } else if (updateProduct.getType().equalsIgnoreCase("Gum")){
          System.out.println("Chew Chew, Yum!");
+
              System.out.println(" ");
 
-    } Logger.logMessage(ItemStock.findProduct(chosenProductLocation).getName() + " " +
+
+
+
+    }
+
+        totalPrice = totalPrice.add(updateProduct.getPrice());
+        if (salesMap.containsKey(updateProduct.getName())){
+
+            salesMap.put(updateProduct.getName(), salesMap.get(updateProduct.getName()) + 1 );
+
+        } else {
+            salesMap.put(updateProduct.getName(), 1);
+        }
+
+        Logger.logMessage(ItemStock.findProduct(chosenProductLocation).getName() + " " +
                 chosenProductLocation + " $" + (currentBalance.add(ItemStock.findProduct(chosenProductLocation).getPrice()))
                 + " $" + currentBalance);
     }
@@ -126,5 +176,6 @@ The vending machine application is the main application.
         currentBalance = BigDecimal.ZERO;
         paymentInput = BigDecimal.ZERO;
     }
+
 
 }

@@ -12,7 +12,7 @@ public class Product
     private String name;
     private BigDecimal price;
     private String type;
-    private int quantity = 5;
+    private int quantity;
 
 
 
@@ -21,8 +21,9 @@ public class Product
         this.name = name;
         this.price = price;
         this.type = type;
-
+        this.quantity = quantity;
     }
+
 
     public String getSlotLocation() {
         return slotLocation;
@@ -42,6 +43,10 @@ public class Product
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void purchaseItem(){
+        quantity--;
     }
 
 

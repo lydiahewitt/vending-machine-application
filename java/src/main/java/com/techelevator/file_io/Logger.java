@@ -20,6 +20,10 @@ public class Logger {
     public Logger(String directory)
     {
         this.directory = directory;
+        File folder = new File(directory);
+        if(!folder.exists()){
+            folder.mkdir();
+        }
     }
 
     public static void logMessage(String message)

@@ -42,6 +42,9 @@ public class UserInput
         {
             return "exit";
         }
+        else if (option.equals("4")){
+            return "Sales Report";
+        }
         else
         {
             return "";

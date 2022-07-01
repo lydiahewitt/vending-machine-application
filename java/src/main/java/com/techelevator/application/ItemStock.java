@@ -20,7 +20,7 @@ public class ItemStock {
         FileProductLoader loader = new FileProductLoader();
         itemsList = loader.getProducts();
         for (Product product: itemsList) {
-            int quantity = 5;
+          //  int quantity = 5;
             vendingMachineItems.put(product.getSlotLocation(), product);
 
         }
@@ -33,6 +33,20 @@ public class ItemStock {
     }
     public static Product findProduct(String stockId){
         return vendingMachineItems.get(stockId);
+    }
+
+    public static Product purchaseProduct(String stockId) {
+        Product current = findProduct(stockId);
+        current.purchaseItem();
+//        Product updateProduct = new Product(current.getSlotLocation()
+//                , current.getName()
+//                , current.getPrice()
+//                , current.getType()
+//                , current.getQuantity()-1);
+//
+//        vendingMachineItems.put(stockId, updateProduct);
+        return current;
+
     }
 
 
