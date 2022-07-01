@@ -48,7 +48,7 @@ public class Product
     @Override
     public String toString()
     {
-        return slotLocation + " - " + name + " - $" + price + "-" + type + "-" + quantity;
+        return slotLocation + " - " + name + " - $" + price + " - " + type + " - " + quantity;
     }
 
 }
