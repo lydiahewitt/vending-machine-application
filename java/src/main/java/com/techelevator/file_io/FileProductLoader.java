@@ -20,7 +20,7 @@ public class FileProductLoader
         try(Scanner fileScanner = new Scanner(productsPath))
         {
             // read one line to skip the header
-            fileScanner.nextLine();
+            //fileScanner.nextLine();
 
             //loop and add each product to the list
             while(fileScanner.hasNextLine())
