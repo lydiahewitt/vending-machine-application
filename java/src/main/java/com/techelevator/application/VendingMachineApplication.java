@@ -24,7 +24,6 @@ The vending machine application is the main application.
 
     ItemStock inventory = new ItemStock();
     BigDecimal paymentInput = BigDecimal.ZERO;
-    //BigDecimal remainingBalance = BigDecimal.ZERO;
     BigDecimal currentBalance = BigDecimal.ZERO;
     static Map<String, Integer> salesMap = new HashMap<>();
     BigDecimal totalPrice = BigDecimal.ZERO;
@@ -126,7 +125,6 @@ The vending machine application is the main application.
                 + "Price: $" + ItemStock.getVendingMachineItems().get(chosenProductLocation).getPrice() + " "
                 + "\nRemaining balance: $" + currentBalance);
 
-       //  Product updateProduct = ItemStock.purchaseProduct(chosenProductLocation);
 
 
 

@@ -9,14 +9,7 @@ import java.util.Map;
 
 import com.techelevator.application.VendingMachineApplication;
 
-/**
- * Responsibilities:
- *      create a new receipt file and add the receipt details
- *
- * Dependencies:
- *      ShoppingCart
- *      Product
- */
+
 public class SalesReport {
     private static final String FILE_EXTENSION = ".log";
 

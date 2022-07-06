@@ -2,10 +2,6 @@ package com.techelevator.products;
 
 import java.math.BigDecimal;
 
-/**
- * Responsibilities:
- *      Knows the id, name, price and type of the product
- */
 public class Product
 {
     private String slotLocation;
